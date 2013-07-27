@@ -17,15 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class droidsyncservice extends Service {
-	 
-	 private static final String appKey = "m8w5uz7aa4k3k24";
-	 private static final String appSecret = "etj8voezjuqujw6";
-
-	    private static final int REQUEST_LINK_TO_DBX = 0;
-	    private DbxAccountManager mDbxAcctMgr;
-	    private File dir;
-	    private int icon;
+public class initservice extends Service {
 	    @Override
 	 public IBinder onBind(Intent arg0) {  
 	  Log.d(getClass().getSimpleName(), "onBind()");
@@ -37,7 +29,7 @@ public class droidsyncservice extends Service {
 	  public int onStartCommand(Intent intent, int flags, int startId) {
 	   
 	
-
+		 
 		  
 
 		  return Service.START_STICKY;
@@ -60,28 +52,7 @@ public class droidsyncservice extends Service {
 	    public void onCreate() {
 	     super.onCreate();
 	     //toastmessage("DroidSync Service Created");
-		 icon=R.drawable.ic_launcher;
-		 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-			StrictMode.setThreadPolicy(policy);
-			File sdCard = Environment.getExternalStorageDirectory();
-			dir = new File (sdCard.getAbsolutePath() + "/prashdropsync/");
-			dir.mkdirs();
-		  mDbxAcctMgr = DbxAccountManager.getInstance(getApplicationContext(), appKey, appSecret);
-		  if (mDbxAcctMgr.hasLinkedAccount()) {
-			  
-			  Thread thread=new Thread()
-				{
-					public void run()
-					{
-						//toastmessage("Deleting unwanted files");
-						  servtodroid.servtodroidsync(DbxPath.ROOT,getApplicationContext(),mDbxAcctMgr,icon);
-					}
-				};
-				thread.start();
-  
-		  }
-		  else
-				 toastmessage("Open the DroidSync App and link your Dropbox Account to it");
+	   
 	     
 	    }
 	    
@@ -94,7 +65,7 @@ public class droidsyncservice extends Service {
 	    @Override
 	    public void onStart(Intent intent, int startId) {
 	     super.onStart(intent, startId);  
-	    toastmessage("DroidSync Service Started");
+	    // toastmessage("DroidSync Service Started");
 	    }
 
 	  

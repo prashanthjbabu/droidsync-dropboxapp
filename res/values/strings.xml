@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">droidsync</string>
+    <string name="app_name">Droid Sync</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="app_desc">This application syncs a specific dropbox app folder to your phone . It provides a one way sync i.e. from dropbox to your phone.This app has no specific settings  , it syncs all dropbox stuff onto a folder in your SD Card.</string>
 
 </resources>

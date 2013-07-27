@@ -3,7 +3,9 @@ package com.prashanth.droidsync;
 import java.io.File;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
@@ -11,25 +13,21 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.TextView;
 
+import com.actionbarsherlock.app.SherlockActivity;
 import com.dropbox.sync.android.DbxAccountManager;
-import com.dropbox.sync.android.DbxPath;
 
 
-public class MainActivity extends Activity  {
+public class MainActivity extends SherlockActivity  {
 
 	private static final String appKey = "m8w5uz7aa4k3k24";
     private static final String appSecret = "etj8voezjuqujw6";
 
     private static final int REQUEST_LINK_TO_DBX = 0;
-    private TextView mTestOutput;
-    private TextView readyfield;
-    private TextView syncoutput;
+  
     private Button mLinkButton;
     private DbxAccountManager mDbxAcctMgr;
     private File dir;
-    private Button startbutton;
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -39,9 +37,7 @@ public class MainActivity extends Activity  {
 		File sdCard = Environment.getExternalStorageDirectory();
 		dir = new File (sdCard.getAbsolutePath() + "/prashdropsync/test/");
 		dir.mkdirs();
-		mTestOutput = (TextView) findViewById(R.id.test_output);
-		readyfield = (TextView) findViewById(R.id.ready_field);
-		syncoutput = (TextView) findViewById(R.id.sync_output);
+		
 		mLinkButton = (Button) findViewById(R.id.link_button);
 		//startbutton = (Button) findViewById(R.id.start_button);
 		//startbutton.setEnabled(false);
@@ -70,48 +66,44 @@ public class MainActivity extends Activity  {
 
     private void startservice()
     {
-    	int icon=R.drawable.ic_launcher;
-		Intent service = new Intent(this, droidsyncservice.class);
-		service.putExtra("icon",icon);
-		this.startService(service);
+    	WifiManager wifi = (WifiManager)getSystemService(Context.WIFI_SERVICE);
+    	if (wifi.isWifiEnabled()==true)
+    	{
+    		Intent service = new Intent(this,droidsyncservice.class);
+    		//service.putExtra("icon",icon);
+    		this.startService(service);
+    	}
+    	else
+    	{
+    	   // not connected..dont do anything..
+    	
+    	}
+    	//int icon=R.drawable.ic_launcher;
+		
     }
 	@Override
 	protected void onResume() {
 		super.onResume();
 		if (mDbxAcctMgr.hasLinkedAccount()) {
 		    showLinkedView();
-		    readyfield.setText("Ready to sync");
-    		
     		startservice();
-        	//servtodroid.servtodroidsync(DbxPath.ROOT,getApplicationContext(),mDbxAcctMgr,icon);
-
-		    //startbutton.setEnabled(true);
-//		    servtodroidsync();
 		} else {
 			showUnlinkedView();
 		}
 	}
     private void showLinkedView() {
         mLinkButton.setVisibility(View.GONE);
-        mTestOutput.setVisibility(View.VISIBLE);
     }
 
     private void showUnlinkedView() {
         mLinkButton.setVisibility(View.VISIBLE);
-        mTestOutput.setVisibility(View.GONE);
     }
     
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_LINK_TO_DBX) {
             if (resultCode == Activity.RESULT_OK) {
-    		    readyfield.setText("Ready to sync");
-//    		    startbutton.setEnabled(true);
-        		int icon=R.drawable.ic_launcher;
         		startservice();
-            	servtodroid.servtodroidsync(DbxPath.ROOT,getApplicationContext(),mDbxAcctMgr,icon);
-        		        		
             } else {
-                mTestOutput.setText("Link to Dropbox failed or was cancelled.");
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

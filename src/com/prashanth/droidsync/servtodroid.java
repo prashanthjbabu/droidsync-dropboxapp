@@ -48,14 +48,17 @@ public class servtodroid {
 	            	final File file = new File(dir, info.path.toString().substring(1));
 	                if(!file.exists())
 	                {
-	                				makenotification(1,"Downloading file "+file.toString());
+	                				makenotification(1,"Downloading file "+file.getName());
+    								System.out.println("OPEN START");
 	                	        	DbxFile myfile = dbxFs.open(info.path);
+    								System.out.println("OPEN FINISH");
+    								System.out.println("READ START");
 					                FileInputStream fs=myfile.getReadStream();
-				                	toastmessage("Downloading file "+myfile.toString());
+    								System.out.println("READ FINISH");
+					                //	toastmessage("Downloading file "+myfile.toString());
 					                FileOutputStream f = new FileOutputStream(file);
 				                	int read = 0;
-				            		byte[] bytes = new byte[1024];
-				             
+				            		byte[] bytes = new byte[1024];				             
 				            		while ((read = fs.read(bytes)) != -1) {
 				            			f.write(bytes, 0, read);
 				            		}
@@ -101,7 +104,7 @@ public class servtodroid {
         	 File sdCard = Environment.getExternalStorageDirectory();
         		dir = new File (sdCard.getAbsolutePath() + "/prashdropsync/");
         		dir.mkdirs();
-        		toastmessage("Starting the process");
+        		//toastmessage("Starting the process");
         		makenotification(1,"Performing Initial Sync");
             // Create DbxFileSystem for synchronized file access.
           //  syncoutput.setText("INITIAL SYNC STARTED");
@@ -115,7 +118,7 @@ public class servtodroid {
 			{
 				public void run()
 				{
-					toastmessage("Deleting unwanted files");
+					//toastmessage("Deleting unwanted files");
 		            deleteunwantedfiles(dbxFs,pathtosync);
 				}
 			};
@@ -125,7 +128,7 @@ public class servtodroid {
 			{
 				public void run()
 				{
-					toastmessage("Creating the required files");
+					//toastmessage("Creating the required files");
 		            createfiles(dbxFs,pathtosync);
 				}
 			};
@@ -166,7 +169,7 @@ public class servtodroid {
 				}
 				if(flag == 0)
 				{
-					toastmessage("Deleting File "+myfiles[fileInList].toString());
+					//toastmessage("Deleting File "+myfiles[fileInList].toString());
 					//file object not found.. delete the file or directory
 					if(myfiles[fileInList].isFile())
 						myfiles[fileInList].delete();					
@@ -249,7 +252,7 @@ public class servtodroid {
     private static void pathchangefunc(final DbxFileSystem dbfs, DbxPath registeredPath)
     {
     	try{
-    		toastmessage("Performing sync");
+    		//toastmessage("Performing sync");
     		makenotification(1,"Performing Sync");
 
     		
@@ -270,12 +273,18 @@ public class servtodroid {
                     {
                 		//Handler h = new Handler(c.getMainLooper());
                     
-    								makenotification(1,"DOWNLOADING FILE "+file.toString());
-    								toastmessage("Downloading file "+file.toString());
-    								System.out.println("DOWNLOADING FILE "+file.toString());
+    								makenotification(1,"Downloading File "+file.getName());
+    								//toastmessage("Downloading file "+info.path.toString());
+    								System.out.println("Downloading File "+file.getName());
+    								System.out.println("OPEN START");
         	                    	DbxFile dbmyfile = dbfs.open(info.path);
-        	                        FileInputStream fs=dbmyfile.getReadStream();
-        	                        toastmessage("Download complete for file  "+file.toString());
+        	                    	System.out.println("OPEN FINISH");
+        	                    	System.out.println("READ START");
+
+        	                    	FileInputStream fs=dbmyfile.getReadStream();
+        	                    	System.out.println("READ FINISH");
+
+        	                        //toastmessage("Download complete for file  "+file.toString());
         	                        //System.out.println("ADDING LISTENER TO FILE "+file.toString());
         	                       // dbmyfile.addListener(myfilelistener);
         	                        //System.out.println("SHOULD HAVE ADDED LISTENER TO FILE "+file.toString());
@@ -319,7 +328,7 @@ public class servtodroid {
     	 		//Toast.makeText(c, "Local Sync On Update Complete",Toast.LENGTH_SHORT).show();
 
             }
-            toastmessage("Sync Done");
+            //toastmessage("Sync Done");
             makenotification(1,"Sync Complete , All files are up to date");
     		//notificatoinManager.cancel(3);
     		
